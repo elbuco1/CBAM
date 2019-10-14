@@ -1,0 +1,11 @@
+{
+    "batch_size": 16,
+    "lr": 0.001,
+    "momentum": 0.9,
+    "batch_every": 100,
+    "n_epochs": 2,
+    "num_workers":2,
+    "model_name": "naive_net",
+    "load_model":"",
+    "save_every": 1
+}

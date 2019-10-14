@@ -1,0 +1,5 @@
+{
+    "model_path": "reports/models/best_naive_net.pth",
+    "batch_size": 32,
+    "num_workers": 2
+}

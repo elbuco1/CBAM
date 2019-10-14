@@ -1,0 +1,6 @@
+{
+    "data":"data/",
+    "losses": "reports/losses/",
+    "models": "reports/models/",
+    "random_seed":1651
+}
