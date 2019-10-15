@@ -6,29 +6,41 @@ import torch.nn.functional as F
 
 class CBAM(nn.Module):
 
-    def __init__(self, n_channels_in, reduction_ratio):
+    def __init__(self, n_channels_in, reduction_ratio, kernel_size):
         super(CBAM, self).__init__()
         self.n_channels_in = n_channels_in
         self.reduction_ratio = reduction_ratio
+        self.kernel_size = kernel_size
 
         self.channel_attention = ChannelAttention(n_channels_in, reduction_ratio)
+        self.spatial_attention = SpatialAttention(kernel_size)
 
     def forward(self, f):
         chan_att = self.channel_attention(f)
         fp = chan_att * f
-        return fp
+        spat_att = self.spatial_attention(fp)
+        fpp = spat_att * fp
+        return fpp
 
 
 class SpatialAttention(nn.Module):
-    def __init__(self):
+    def __init__(self, kernel_size):
         super(SpatialAttention, self).__init__()
+        self.kernel_size = kernel_size
+
+        assert kernel_size % 2 == 1, "Odd kernel size required"
+        self.conv = nn.Conv2d(in_channels = 2, out_channels = 1, kernel_size = kernel_size, padding= int((kernel_size-1)/2))
+        # batchnorm
 
     def forward(self, x):
         max_pool = self.agg_channel(x, "max")
         avg_pool = self.agg_channel(x, "avg")
-
-        
-        return x
+        pool = torch.cat([max_pool, avg_pool], dim = 1)
+        conv = self.conv(pool)
+        # batchnorm ????????????????????????????????????????????
+        conv = conv.repeat(1,x.size()[1],1,1)
+        att = torch.sigmoid(conv)        
+        return att
 
     def agg_channel(self, x, pool = "max"):
         b,c,h,w = x.size()
@@ -55,6 +67,7 @@ class ChannelAttention(nn.Module):
             nn.ReLU(),
             nn.Linear(self.middle_layer_size, self.n_channels_in)
         )
+        print(self.bottleneck)
 
 
     def forward(self, x):
@@ -84,18 +97,22 @@ def main():
 
     f = torch.FloatTensor([
         [
-            [[1,1,1], [1,2,1], [1,1,1]],
-            [[2,2,2], [2,3,2], [2,2,2]],
-            [[3,3,3], [3,4,3], [3,3,3]]
+            [[1,1,1,1,1], [1,1,2,1,1], [1,1,1,1,1]],
+            [[2,2,2,2,2], [2,2,3,2,2], [2,2,2,2,2]],
+            [[3,3,3,3,3], [3,3,4,3,3], [3,3,3,3,3]]
         ]
     ])
 
-    sa = SpatialAttention()
-    sa(f)
-    # cbam = CBAM(f.size()[1],1) 
+    print(f.size())
+
+    # sa = SpatialAttention(kernel_size = 3)
+    # sa(f)
+    cbam = CBAM(n_channels_in = f.size()[1],reduction_ratio = 2, kernel_size = 3) 
 
 
-    # fp = cbam(f)
+    fpp = cbam(f)
+    print(fpp.size())
+    print(fpp)
     # print(f)
     # print(fp)
     
