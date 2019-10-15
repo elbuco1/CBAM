@@ -7,13 +7,19 @@ import torchvision.transforms as transforms
 import random
 import json
 import numpy as np 
+import time
 
 from torch import optim
 
 from src.models.helpers import save_checkpoint, load_checkpoint, plot_losses, train, test
 from src.models.models.basic_cnn import Net
+from src.models.models.resnet_cifar10 import ResNet50
 
-
+class Identity(nn.Module):
+    def __init__(self, *args, **kwargs):
+        super().__init__()
+    def forward(self, x):
+        return x
 
 def main():
     args = sys.argv
@@ -49,7 +55,17 @@ def main():
     if training_parameters["load_model"] != "":
         net, optimizer, training_parameters, epoch_start = load_checkpoint(training_parameters["load_model"])
     else:
-        net = Net()
+        # net = Net()
+        net = torchvision.models.resnet50()
+        net.avgpool = Identity()
+        net.fc = Identity()
+        print(net)
+        # num_ftrs = net.fc.in_features
+        # net.fc = nn.Linear(num_ftrs, 10)
+
+        # net = ResNet50()
+
+
         epoch_start = 0
         optimizer = optim.SGD(net.parameters(),lr = training_parameters["lr"], momentum= training_parameters["momentum"])
 
@@ -69,6 +85,7 @@ def main():
     best_acc = 0
 
     # Start training
+    s = time.time()
     for epoch in range(epoch_start, training_parameters["n_epochs"]):
         batch_losses = train(trainloader, optimizer, net, criterion, training_parameters, epoch, device)
         accuracy = test(testloader, net, device)
@@ -78,7 +95,7 @@ def main():
         epoch_losses.append(epoch_loss)
         accuracies.append(accuracy)
 
-        print("Epoch n°{}, bce loss: {}, test accuracy: {}".format(epoch,epoch_loss, accuracy))
+        print("Epoch n°{}, bce loss: {}, test accuracy: {}, duration {}".format(epoch,epoch_loss, accuracy, time.time() - s))
 
         # plot losses
         plot_losses(

@@ -1,11 +1,11 @@
 {
-    "batch_size": 16,
+    "batch_size": 4,
     "lr": 0.001,
     "momentum": 0.9,
     "batch_every": 100,
-    "n_epochs": 2,
+    "n_epochs": 15,
     "num_workers":2,
-    "model_name": "naive_net",
+    "model_name": "resnet50_cifar",
     "load_model":"",
     "save_every": 1
 }
