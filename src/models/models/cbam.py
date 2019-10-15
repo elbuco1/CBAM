@@ -6,13 +6,17 @@ import torch.nn.functional as F
 
 class CBAM(nn.Module):
 
-    def __init__(self, ):
+    def __init__(self, n_channels_in, reduction_ratio):
         super(CBAM, self).__init__()
-        
+        self.n_channels_in = n_channels_in
+        self.reduction_ratio = reduction_ratio
 
-    def forward(self, x):
-        out = x
-        return out
+        self.channel_attention = ChannelAttention(n_channels_in, reduction_ratio)
+
+    def forward(self, f):
+        chan_att = self.channel_attention(f)
+        fp = chan_att * f
+        return fp
 
 
 class ChannelAttention(nn.Module):
@@ -51,25 +55,22 @@ class ChannelAttention(nn.Module):
         return out
 
 def main():
-    ca = ChannelAttention(3,1) 
+    cbam = CBAM(3,1) 
     # ca = CBAM() 
 
 
-    test_tensor = torch.FloatTensor([
+    f = torch.FloatTensor([
         [
             [[1,1,1], [1,2,1], [1,1,1]],
             [[2,2,2], [2,3,2], [2,2,2]],
             [[3,3,3], [3,4,3], [3,3,3]]
         ]
     ])
-    print(test_tensor)
-    print(test_tensor.size())
 
-    out = ca(test_tensor)
-
-    fp = out * test_tensor
-    print(out)
+    fp = cbam(f)
+    print(f)
     print(fp)
+    
 
 
 if __name__ == "__main__":
