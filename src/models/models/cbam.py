@@ -19,6 +19,30 @@ class CBAM(nn.Module):
         return fp
 
 
+class SpatialAttention(nn.Module):
+    def __init__(self):
+        super(SpatialAttention, self).__init__()
+
+    def forward(self, x):
+        max_pool = self.agg_channel(x, "max")
+        avg_pool = self.agg_channel(x, "avg")
+
+        
+        return x
+
+    def agg_channel(self, x, pool = "max"):
+        b,c,h,w = x.size()
+        x = x.view(b, c, h*w)
+        x = x.permute(0,2,1)
+        if pool == "max":
+            x = F.max_pool1d(x,c)
+        elif pool == "avg":
+            x = F.avg_pool1d(x,c)
+        x = x.permute(0,2,1)
+        x = x.view(b,1,h,w)
+        return x
+
+
 class ChannelAttention(nn.Module):
     def __init__(self, n_channels_in, reduction_ratio):
         super(ChannelAttention, self).__init__()
@@ -55,7 +79,6 @@ class ChannelAttention(nn.Module):
         return out
 
 def main():
-    cbam = CBAM(3,1) 
     # ca = CBAM() 
 
 
@@ -67,9 +90,14 @@ def main():
         ]
     ])
 
-    fp = cbam(f)
-    print(f)
-    print(fp)
+    sa = SpatialAttention()
+    sa(f)
+    # cbam = CBAM(f.size()[1],1) 
+
+
+    # fp = cbam(f)
+    # print(f)
+    # print(fp)
     
 
 
