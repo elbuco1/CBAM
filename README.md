@@ -102,7 +102,7 @@ They were trained for 15 epochs with batch size 4. Results can be found in the f
 ### ResNet18
 
 <div align='center'>
-    <img src="ResNet18_losses.jpg"></img>
+    <img src="images/ResNet18_losses.jpg"></img>
 </div>
 
 ### ResNet18CbamBlock
