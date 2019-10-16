@@ -1,4 +1,4 @@
-# CBAM: Convolutional Block Attention Module for CIFAR10 with ResNet backbone
+# CBAM: Convolutional Block Attention Module for CIFAR10 on ResNet backbone with Pytorch
 This repository aims at reproducing the results from "[CBAM: Convolutional Block Attention Module](https://arxiv.org/abs/1807.06521)". We use the module coinjointly with the ResNet CNN architecture. The module is tested on the [CIFAR10](https://www.cs.toronto.edu/~kriz/cifar.html) dataset which is an image classification task with 10 different classes.
 
 ## CBAM module
@@ -27,6 +27,7 @@ Both are available here.
 
 ## Run the project
 
+### Parameters
 The parameters, set in the file src/parameters/training.json are the followings:
 
 * **batch_size**: the batch size for training
@@ -36,7 +37,7 @@ The parameters, set in the file src/parameters/training.json are the followings:
 * **n_epochs**: number of epochs for training
 * **num_workers**: num of workers for the dataloader
 * **model_name**: name used for saving losses charts and trained models
-* **load_model**: trained model checkpoint path, if not the empty string then resume training from last trained epoch up to n_epochs
+* **load_model**: trained model checkpoint path, if not the empty string then resume training from last trained epoch up to n_epochs. Checkpoint are stored in src/reports/models/
 * **save_every**: how often to save the model in training (in epochs)
 * **reduction_ratio**: reduction ratio for the channel attention bottleneck default to 16
 * **kernel_cbam**: kernel for convolution in spatial attention must be an odd number
@@ -44,4 +45,16 @@ The parameters, set in the file src/parameters/training.json are the followings:
 * **use_cbam_class**: if 1 put CBAM block before the classifier
 * **resnet_depth**: Resnet type in [18,34,50,101,152]
 
+
+Every time there is a new best model, it is automatically stored as checkpoint in src/reports/models/ the file name includes "best" and " **model_name**.
+Training and test losses are plotted and stored every epoch in src/reports/losses/. The file name includes the last epoch number and " **model_name**.
+
+### Run
+Once the parameters are selected, use the Makefile to start the training. The command line is: **python make train**.
+
+### Restart training
+
+* Set the parameter **load_model** as explained in the **Parameters** part.
+* Set the number of epochs (**n_epochs**) which must be higher than the number of epochs the model was already trained on.
+* Run.
 
