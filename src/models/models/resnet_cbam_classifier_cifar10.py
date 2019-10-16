@@ -11,6 +11,7 @@ Reference:
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from src.models.models.cbam import CBAM
 
 
 class BasicBlock(nn.Module):
@@ -35,7 +36,6 @@ class BasicBlock(nn.Module):
         out = self.bn2(self.conv2(out))
         out += self.shortcut(x)
         out = F.relu(out)
-
         return out
 
 
@@ -68,7 +68,7 @@ class Bottleneck(nn.Module):
 
 
 class ResNet(nn.Module):
-    def __init__(self, block, num_blocks, num_classes=10):
+    def __init__(self, block, num_blocks, num_classes=10,reduction_ratio = 1, kernel_cbam = 3):
         super(ResNet, self).__init__()
         self.in_planes = 64
 
@@ -78,7 +78,11 @@ class ResNet(nn.Module):
         self.layer2 = self._make_layer(block, 128, num_blocks[1], stride=2)
         self.layer3 = self._make_layer(block, 256, num_blocks[2], stride=2)
         self.layer4 = self._make_layer(block, 512, num_blocks[3], stride=2)
+
+        self.cbam = CBAM(n_channels_in = 512*block.expansion, reduction_ratio = reduction_ratio, kernel_size = kernel_cbam)
+
         self.linear = nn.Linear(512*block.expansion, num_classes)
+
 
     def _make_layer(self, block, planes, num_blocks, stride):
         strides = [stride] + [1]*(num_blocks-1)
@@ -94,28 +98,35 @@ class ResNet(nn.Module):
         out = self.layer2(out)
         out = self.layer3(out)
         out = self.layer4(out)
-        print(out.size())
+        ######## avant pooling ou  après?
 
+        att_cbam = self.cbam(out)
+        out = out  +att_cbam
+        
         out = F.avg_pool2d(out, 4)
+
+
+        # att_cbam = self.cbam(out)
+        # out = out + att_cbam
+        ##################################""
         out = out.view(out.size(0), -1)
         out = self.linear(out)
         return out
 
+def ResNetCBAMc18(reduction_ratio = 1, kernel_cbam = 3):
+    return ResNet(BasicBlock, [2,2,2,2], reduction_ratio= reduction_ratio, kernel_cbam = kernel_cbam)
 
-def ResNet18():
-    return ResNet(BasicBlock, [2,2,2,2])
+def ResNetCBAMc34(reduction_ratio = 1, kernel_cbam = 3):
+    return ResNet(BasicBlock, [3,4,6,3], reduction_ratio= reduction_ratio, kernel_cbam = kernel_cbam)
 
-def ResNet34():
-    return ResNet(BasicBlock, [3,4,6,3])
+def ResNetCBAMc50(reduction_ratio = 1, kernel_cbam = 3):
+    return ResNet(Bottleneck, [3,4,6,3], reduction_ratio= reduction_ratio, kernel_cbam = kernel_cbam)
 
-def ResNet50():
-    return ResNet(Bottleneck, [3,4,6,3])
+def ResNetCBAMc101(reduction_ratio = 1, kernel_cbam = 3):
+    return ResNet(Bottleneck, [3,4,23,3], reduction_ratio= reduction_ratio, kernel_cbam = kernel_cbam)
 
-def ResNet101():
-    return ResNet(Bottleneck, [3,4,23,3])
-
-def ResNet152():
-    return ResNet(Bottleneck, [3,8,36,3])
+def ResNetCBAMc152(reduction_ratio = 1, kernel_cbam = 3):
+    return ResNet(Bottleneck, [3,8,36,3], reduction_ratio= reduction_ratio, kernel_cbam = kernel_cbam)
 
 
 def test():

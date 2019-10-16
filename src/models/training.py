@@ -13,7 +13,9 @@ from torch import optim
 
 from src.models.helpers import save_checkpoint, load_checkpoint, plot_losses, train, test
 from src.models.models.basic_cnn import Net
-from src.models.models.resnet_cifar10 import ResNet50
+from src.models.models.resnet_cifar10 import ResNet18
+from src.models.models.resnet_cbam_cifar10 import ResNetCBAM18
+from src.models.models.resnet_cbam_classifier_cifar10 import ResNetCBAMc18
 
 class Identity(nn.Module):
     def __init__(self, *args, **kwargs):
@@ -23,6 +25,7 @@ class Identity(nn.Module):
 
 def main():
     args = sys.argv
+    torch.autograd.set_detect_anomaly(True)
 
     # load parameters
     project_parameters = json.load(open(args[1]))
@@ -31,6 +34,7 @@ def main():
 
     # set random seed and device
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    # device = torch.device("cpu")
     seed = project_parameters["random_seed"]
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
@@ -56,15 +60,16 @@ def main():
         net, optimizer, training_parameters, epoch_start = load_checkpoint(training_parameters["load_model"])
     else:
         # net = Net()
-        net = torchvision.models.resnet50()
-        net.avgpool = Identity()
-        net.fc = Identity()
-        print(net)
+        # net = torchvision.models.resnet50()
+        # net.avgpool = Identity()
+        # net.fc = Identity()
         # num_ftrs = net.fc.in_features
         # net.fc = nn.Linear(num_ftrs, 10)
 
-        # net = ResNet50()
+        # net = ResNet18()
+        net = ResNetCBAM18()
 
+        print(net)
 
         epoch_start = 0
         optimizer = optim.SGD(net.parameters(),lr = training_parameters["lr"], momentum= training_parameters["momentum"])

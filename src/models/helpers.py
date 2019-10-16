@@ -67,7 +67,6 @@ def train(trainloader, optimizer, net, criterion, training_parameters, epoch, de
         optimizer.zero_grad()
 
         outputs = net(imgs)
-
         loss = criterion(outputs, labels)
         loss.backward()
         optimizer.step()

@@ -67,7 +67,6 @@ class ChannelAttention(nn.Module):
             nn.ReLU(),
             nn.Linear(self.middle_layer_size, self.n_channels_in)
         )
-        print(self.bottleneck)
 
 
     def forward(self, x):

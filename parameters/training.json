@@ -5,7 +5,7 @@
     "batch_every": 100,
     "n_epochs": 15,
     "num_workers":2,
-    "model_name": "resnet50_cifar",
+    "model_name": "resnet18_cbam_cifar",
     "load_model":"",
     "save_every": 1
 }

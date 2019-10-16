@@ -2,6 +2,7 @@
 data/*
 reports/losses/*
 reports/models/*
+reports/save/*
 
 !.gitkeep
 # Byte-compiled / optimized / DLL files

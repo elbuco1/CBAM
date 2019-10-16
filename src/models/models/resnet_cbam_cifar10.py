@@ -12,11 +12,13 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+from src.models.models.cbam import CBAM
+
 
 class BasicBlock(nn.Module):
     expansion = 1
 
-    def __init__(self, in_planes, planes, stride=1):
+    def __init__(self, in_planes, planes, stride=1, reduction_ratio = 1, kernel_cbam = 3):
         super(BasicBlock, self).__init__()
         self.conv1 = nn.Conv2d(in_planes, planes, kernel_size=3, stride=stride, padding=1, bias=False)
         self.bn1 = nn.BatchNorm2d(planes)
@@ -30,19 +32,23 @@ class BasicBlock(nn.Module):
                 nn.BatchNorm2d(self.expansion*planes)
             )
 
+        self.cbam = CBAM(n_channels_in = self.expansion*planes, reduction_ratio = reduction_ratio, kernel_size = kernel_cbam)
+
     def forward(self, x):
         out = F.relu(self.bn1(self.conv1(x)))
         out = self.bn2(self.conv2(out))
         out += self.shortcut(x)
         out = F.relu(out)
 
+        att_cbam = self.cbam(out)
+        out = out + att_cbam
         return out
 
 
 class Bottleneck(nn.Module):
     expansion = 4
 
-    def __init__(self, in_planes, planes, stride=1):
+    def __init__(self, in_planes, planes, stride=1, reduction_ratio = 1, kernel_cbam = 3):
         super(Bottleneck, self).__init__()
         self.conv1 = nn.Conv2d(in_planes, planes, kernel_size=1, bias=False)
         self.bn1 = nn.BatchNorm2d(planes)
@@ -57,6 +63,7 @@ class Bottleneck(nn.Module):
                 nn.Conv2d(in_planes, self.expansion*planes, kernel_size=1, stride=stride, bias=False),
                 nn.BatchNorm2d(self.expansion*planes)
             )
+        self.cbam = CBAM(n_channels_in = self.expansion*planes, reduction_ratio = reduction_ratio, kernel_size = kernel_cbam)
 
     def forward(self, x):
         out = F.relu(self.bn1(self.conv1(x)))
@@ -64,14 +71,17 @@ class Bottleneck(nn.Module):
         out = self.bn3(self.conv3(out))
         out += self.shortcut(x)
         out = F.relu(out)
+        att_cbam = self.cbam(out)
+        out = out + att_cbam
         return out
 
 
 class ResNet(nn.Module):
-    def __init__(self, block, num_blocks, num_classes=10):
+    def __init__(self, block, num_blocks, num_classes=10, reduction_ratio = 1, kernel_cbam = 3):
         super(ResNet, self).__init__()
         self.in_planes = 64
-
+        self.reduction_ratio = reduction_ratio
+        self.kernel_cbam = kernel_cbam
         self.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1, bias=False)
         self.bn1 = nn.BatchNorm2d(64)
         self.layer1 = self._make_layer(block, 64, num_blocks[0], stride=1)
@@ -84,7 +94,7 @@ class ResNet(nn.Module):
         strides = [stride] + [1]*(num_blocks-1)
         layers = []
         for stride in strides:
-            layers.append(block(self.in_planes, planes, stride))
+            layers.append(block(self.in_planes, planes, stride, self.reduction_ratio, self.kernel_cbam))
             self.in_planes = planes * block.expansion
         return nn.Sequential(*layers)
 
@@ -94,32 +104,33 @@ class ResNet(nn.Module):
         out = self.layer2(out)
         out = self.layer3(out)
         out = self.layer4(out)
-        print(out.size())
 
         out = F.avg_pool2d(out, 4)
         out = out.view(out.size(0), -1)
+
         out = self.linear(out)
+
         return out
 
 
-def ResNet18():
-    return ResNet(BasicBlock, [2,2,2,2])
+def ResNetCBAM18(reduction_ratio = 1, kernel_cbam = 3):
+    return ResNet(BasicBlock, [2,2,2,2], reduction_ratio= reduction_ratio, kernel_cbam = kernel_cbam)
 
-def ResNet34():
-    return ResNet(BasicBlock, [3,4,6,3])
+def ResNetCBAM34(reduction_ratio = 1, kernel_cbam = 3):
+    return ResNet(BasicBlock, [3,4,6,3], reduction_ratio= reduction_ratio, kernel_cbam = kernel_cbam)
 
-def ResNet50():
-    return ResNet(Bottleneck, [3,4,6,3])
+def ResNetCBAM50(reduction_ratio = 1, kernel_cbam = 3):
+    return ResNet(Bottleneck, [3,4,6,3], reduction_ratio= reduction_ratio, kernel_cbam = kernel_cbam)
 
-def ResNet101():
-    return ResNet(Bottleneck, [3,4,23,3])
+def ResNetCBAM101(reduction_ratio = 1, kernel_cbam = 3):
+    return ResNet(Bottleneck, [3,4,23,3], reduction_ratio= reduction_ratio, kernel_cbam = kernel_cbam)
 
-def ResNet152():
-    return ResNet(Bottleneck, [3,8,36,3])
+def ResNetCBAM152(reduction_ratio = 1, kernel_cbam = 3):
+    return ResNet(Bottleneck, [3,8,36,3], reduction_ratio= reduction_ratio, kernel_cbam = kernel_cbam)
 
 
 def test():
-    net = ResNet18()
+    net = ResNetCBAM18()
     y = net(torch.randn(1,3,32,32))
     print(y.size())
 
