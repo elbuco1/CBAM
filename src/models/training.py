@@ -67,7 +67,8 @@ def main():
         # net.fc = nn.Linear(num_ftrs, 10)
 
         # net = ResNet18()
-        net = ResNetCBAM18()
+        net = ResNetCBAM18(reduction_ratio=training_parameters["reduction_ratio"])
+        # net = ResNetCBAMc18(reduction_ratio=training_parameters["reduction_ratio"])
 
         print(net)
 

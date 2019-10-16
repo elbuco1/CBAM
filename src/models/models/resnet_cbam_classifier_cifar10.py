@@ -101,7 +101,7 @@ class ResNet(nn.Module):
         ######## avant pooling ou  après?
 
         att_cbam = self.cbam(out)
-        out = out  +att_cbam
+        out = out  + att_cbam
         
         out = F.avg_pool2d(out, 4)
 

@@ -7,5 +7,6 @@
     "num_workers":2,
     "model_name": "resnet18_cbam_cifar",
     "load_model":"",
-    "save_every": 1
+    "save_every": 1,
+    "reduction_ratio": 16
 }

@@ -17,9 +17,13 @@ class CBAM(nn.Module):
 
     def forward(self, f):
         chan_att = self.channel_attention(f)
+        # print(chan_att.size())
         fp = chan_att * f
+        # print(fp.size())
         spat_att = self.spatial_attention(fp)
+        # print(spat_att.size())
         fpp = spat_att * fp
+        # print(fpp.size())
         return fpp
 
 
