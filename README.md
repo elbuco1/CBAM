@@ -94,9 +94,9 @@ They were trained for 15 epochs with batch size 4. Results can be found in the f
 
 | Model         | Test Accuracy(%) | 
 | ------------- |:-------------:|
-| ResNet18      | right-aligned |
-| ResNet18CbamBlock      | centered      |
-| ResNet18CbamClass | are neat      |
+| ResNet18      | Nan |
+| ResNet18CbamBlock      | Nan      |
+| ResNet18CbamClass | Nan    |
 
 ## Training curves
 ### ResNet18
