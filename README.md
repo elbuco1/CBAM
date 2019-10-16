@@ -27,6 +27,11 @@ Both are available here in the file **src/models/models/cbam_cifar10.py**.
 
 ## Run the project
 
+### Requirements
+* Install [Anaconda](https://www.anaconda.com/)
+* Create new environment from environment.yml using makefile: **make requirements**
+* Activate environment: **conda activate myenv**
+
 ### Parameters
 The parameters, set in the file **src/parameters/training.json** are the followings:
 
@@ -78,3 +83,16 @@ The corresponding accuracy on test set will be reported in the terminal.
 
 
 ## Results
+
+The reported results are taken from three models:
+
+* **ResNet18**: this is the standard **ResNet** architecture for **CIFAR10** with depth 18.
+* **ResNet18CbamBlock**: this is the **ResNet** architecture with the **CBAM** module added in every block.
+* **ResNet18CbamClass**: this is the **ResNet** architecture with the **CBAM** module added only before the classifier.
+
+They were trained for 15 epochs with batch size 4. Results can be found in the following table:
+
+## Training curves
+### ResNet18
+### ResNet18CbamBlock
+### ResNet18CbamClass

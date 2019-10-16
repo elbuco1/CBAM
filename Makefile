@@ -34,8 +34,8 @@ DATA := data/
 ## Install Python Dependencies
 requirements: test_environment
 	$(PYTHON_INTERPRETER) -m pip install -U pip setuptools wheel
+	$(PYTHON_INTERPRETER) -m conda create --name myenv --file requirements.txt
 	$(PYTHON_INTERPRETER) -m pip install -e .
-	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt
 
 # ## Make Dataset
 # data: requirements
