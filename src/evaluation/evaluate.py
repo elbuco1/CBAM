@@ -41,7 +41,7 @@ def main():
 
     accuracy = test(testloader, model, device)
 
-    print("Eval accuracy: {}%".format(accuracy*100))
+    print("Evaluation accuracy: {}%".format(accuracy*100))
 
 if __name__ == "__main__":
     main()

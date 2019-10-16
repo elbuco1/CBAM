@@ -72,6 +72,8 @@ The parameters, set in the file **src/parameters/evaluation.json** are the follo
 * Set the model path
 * Use the Makefile to start the training. The command line is: **python make evaluate**.
 
+The corresponding accuracy on test set will be reported in the terminal.
+
 
 
 
