@@ -92,6 +92,12 @@ The reported results are taken from three models:
 
 They were trained for 15 epochs with batch size 4. Results can be found in the following table:
 
+| Tables        | Are           | Cool  |
+| ------------- |:-------------:| -----:|
+| col 3 is      | right-aligned | $1600 |
+| col 2 is      | centered      |   $12 |
+| zebra stripes | are neat      |    $1 |
+
 ## Training curves
 ### ResNet18
 ### ResNet18CbamBlock
