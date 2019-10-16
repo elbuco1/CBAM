@@ -15,7 +15,7 @@ This module is independant from the CNN architecture and can be used as is with 
 
 ## ResNet
 
-As the backbone, we use a Resnet implementation taken from [there](https://github.com/kuangliu/pytorch-cifar). The available networks are: ResNet18,Resnet34, Resnet50, ResNet101 and ResNet152. 
+As the backbone, we use a Resnet implementation taken from [there](https://github.com/kuangliu/pytorch-cifar). The available networks are: **ResNet18,Resnet34, Resnet50, ResNet101 and ResNet152**. 
 
 The **CBAM** module can be used **two different ways**:
 
