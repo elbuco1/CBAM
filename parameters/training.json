@@ -8,5 +8,10 @@
     "model_name": "resnet18_cbam_cifar",
     "load_model":"",
     "save_every": 1,
-    "reduction_ratio": 16
+    "reduction_ratio": 16,
+    "kernel_cbam":3,
+    "use_cbam_block":0,
+    "use_cbam_class":1,
+    "resnet_depth":101
+
 }

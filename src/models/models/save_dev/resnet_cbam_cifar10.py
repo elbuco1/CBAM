@@ -121,6 +121,7 @@ class ResNet(nn.Module):
 
 
 def ResNetCBAM18(reduction_ratio = 1, kernel_cbam = 3):
+    print(kernel_cbam)
     return ResNet(BasicBlock, [2,2,2,2], reduction_ratio= reduction_ratio, kernel_cbam = kernel_cbam)
 
 def ResNetCBAM34(reduction_ratio = 1, kernel_cbam = 3):

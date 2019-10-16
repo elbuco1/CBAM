@@ -100,14 +100,15 @@ class ResNet(nn.Module):
         out = self.layer4(out)
         ######## avant pooling ou  après?
 
-        att_cbam = self.cbam(out)
-        out = out  + att_cbam
+        # out = self.cbam(out)
+        out = out  + self.cbam(out)
         
         out = F.avg_pool2d(out, 4)
 
 
-        # att_cbam = self.cbam(out)
-        # out = out + att_cbam
+        # out = self.cbam(out)
+        # out = out  + self.cbam(out)
+
         ##################################""
         out = out.view(out.size(0), -1)
         out = self.linear(out)

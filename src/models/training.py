@@ -12,10 +12,7 @@ import time
 from torch import optim
 
 from src.models.helpers import save_checkpoint, load_checkpoint, plot_losses, train, test
-from src.models.models.basic_cnn import Net
-from src.models.models.resnet_cifar10 import ResNet18
-from src.models.models.resnet_cbam_cifar10 import ResNetCBAM18
-from src.models.models.resnet_cbam_classifier_cifar10 import ResNetCBAMc18
+from src.models.models.cbam_cifar10 import ResNetk
 
 class Identity(nn.Module):
     def __init__(self, *args, **kwargs):
@@ -59,19 +56,14 @@ def main():
     if training_parameters["load_model"] != "":
         net, optimizer, training_parameters, epoch_start = load_checkpoint(training_parameters["load_model"])
     else:
-        # net = Net()
-        # net = torchvision.models.resnet50()
-        # net.avgpool = Identity()
-        # net.fc = Identity()
-        # num_ftrs = net.fc.in_features
-        # net.fc = nn.Linear(num_ftrs, 10)
+        net = ResNetk(
+            k = training_parameters["resnet_depth"],
+            reduction_ratio=training_parameters["reduction_ratio"], 
+            kernel_cbam = training_parameters["kernel_cbam"],
+            use_cbam_block= training_parameters["use_cbam_block"],
+            use_cbam_class= training_parameters["use_cbam_class"]
 
-        # net = ResNet18()
-        net = ResNetCBAM18(reduction_ratio=training_parameters["reduction_ratio"])
-        # net = ResNetCBAMc18(reduction_ratio=training_parameters["reduction_ratio"])
-
-        print(net)
-
+            )
         epoch_start = 0
         optimizer = optim.SGD(net.parameters(),lr = training_parameters["lr"], momentum= training_parameters["momentum"])
 
