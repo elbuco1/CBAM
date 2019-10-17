@@ -6,7 +6,7 @@ The CBAM module takes as input a tensor of feature maps of shape Channel x Heigh
 
 <div align='center'>
     <img src="images/cbam.png"></img>
-    <figcaption>Fig.1 - Full module taken from the original <a href="https://arxiv.org/abs/1807.06521">paper</a> .</figcaption>
+    <figcaption>Fig.1 - Full module taken from the  <a href="https://arxiv.org/abs/1807.06521">original paper</a> .</figcaption>
 </div>
 
 
@@ -14,12 +14,16 @@ The first attention mechanism is applied **channel-wise**, in that we want to se
 
 <div align='center'>
     <img src="images/channel.png"></img>
+    <figcaption>Fig.2 - Channel attention taken from the  <a href="https://arxiv.org/abs/1807.06521">original paper</a> .</figcaption>
+
 </div>
 
 The second attention mechanism is applied along the two **spatial dimensions**. We want to select the more relevant locations in the feature maps independently from the channels (SpatialAttention class).
 
 <div align='center'>
     <img src="images/spatial.png"></img>
+    <figcaption>Fig.3 - Spatial attention taken from the  <a href="https://arxiv.org/abs/1807.06521">original paper</a> .</figcaption>
+
 </div>
 
 This module is independant from the CNN architecture and can be used as is with other projects.
