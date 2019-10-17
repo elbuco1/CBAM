@@ -6,6 +6,7 @@ The CBAM module takes as input a tensor of feature maps of shape Channel x Heigh
 
 <div align='center'>
     <img src="images/cbam.png"></img>
+    <figcaption>Fig.1 - Full module taken from the original <a href="https://arxiv.org/abs/1807.06521">paper</a> .</figcaption>
 </div>
 
 
