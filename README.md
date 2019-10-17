@@ -4,11 +4,22 @@ This repository aims at reproducing the results from "[CBAM: Convolutional Block
 ## CBAM module
 The CBAM module takes as input a tensor of feature maps of shape Channel x Height x Width and apply two self-attention mechanisms consecutively. It is implemented in the **src/models/models/cbam.py** file.
 
+<div align='center'>
+    <img src="images/cbam.png"></img>
+</div>
+
 
 The first attention mechanism is applied **channel-wise**, in that we want to select the channels (or features) that are the more relevant independently from any spatial considerations (ChannelAttention class).
 
+<div align='center'>
+    <img src="images/channel.png"></img>
+</div>
+
 The second attention mechanism is applied along the two **spatial dimensions**. We want to select the more relevant locations in the feature maps independently from the channels (SpatialAttention class).
 
+<div align='center'>
+    <img src="images/spatial.jpg"></img>
+</div>
 
 This module is independant from the CNN architecture and can be used as is with other projects.
 
@@ -90,7 +101,7 @@ The reported results are taken from three models:
 * **ResNet18CbamBlock**: this is the **ResNet** architecture with the **CBAM** module added in every block.
 * **ResNet18CbamClass**: this is the **ResNet** architecture with the **CBAM** module added only before the classifier.
 
-They were trained for 15 epochs with batch size 4. Results can be found in the following table:
+They were trained for 15 epochs with batch size 4 and kernel_cbam 3. Results can be found in the following table:
 
 | Model         | Test Accuracy(%) | 
 | ------------- |:-------------:|
