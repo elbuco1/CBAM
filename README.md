@@ -18,7 +18,7 @@ The first attention mechanism is applied **channel-wise**, in that we want to se
 The second attention mechanism is applied along the two **spatial dimensions**. We want to select the more relevant locations in the feature maps independently from the channels (SpatialAttention class).
 
 <div align='center'>
-    <img src="images/spatial.jpg"></img>
+    <img src="images/spatial.png"></img>
 </div>
 
 This module is independant from the CNN architecture and can be used as is with other projects.
