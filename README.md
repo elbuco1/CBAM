@@ -123,3 +123,7 @@ They were trained for 15 epochs with batch size 4 and kernel_cbam 3. Results can
 
 ### ResNet18CbamBlock
 ### ResNet18CbamClass
+
+<div align='center'>
+    <img src="images/ResNet18CbamClass_losses.jpg"></img>
+</div>
