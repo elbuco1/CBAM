@@ -1,5 +1,5 @@
 {
-    "model_path": "reports/models/best_naive_net.pth",
+    "model_path": "reports/models/ResNet18CbamClass.pth",
     "batch_size": 4,
     "num_workers": 2
 }

@@ -110,9 +110,9 @@ They were trained for 15 epochs with batch size 4 and kernel_cbam 3. Results can
 
 | Model         | Test Accuracy(%) | 
 | ------------- |:-------------:|
-| ResNet18      | Nan |
+| ResNet18      | 84.36 |
 | ResNet18CbamBlock      | Nan      |
-| ResNet18CbamClass | Nan    |
+| ResNet18CbamClass | 84.5    |
 
 ## Training curves
 ### ResNet18
