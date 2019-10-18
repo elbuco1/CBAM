@@ -5,13 +5,13 @@
     "batch_every": 100,
     "n_epochs": 15,
     "num_workers":2,
-    "model_name": "resnet18_cifar10_cbam_class",
+    "model_name": "resnet18_cifar10_cbam_block",
     "load_model":"",
     "save_every": 1,
     "reduction_ratio": 16,
     "kernel_cbam":3,
-    "use_cbam_block":0,
-    "use_cbam_class":1,
+    "use_cbam_block":1,
+    "use_cbam_class":0,
     "resnet_depth":18
 
 }

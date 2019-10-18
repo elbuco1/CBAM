@@ -1,5 +1,5 @@
 {
-    "model_path": "reports/models/ResNet18CbamClass.pth",
+    "model_path": "reports/models/ResNet18CbamBlock.pth",
     "batch_size": 4,
     "num_workers": 2
 }
